@@ -4,7 +4,7 @@ x-srsue:
   &ue-settings
   build: .
   command: "srsue ue.conf.fauxrf"
-  ipc: "container:virtual-srsenb"
+  ipc: "service:srsenb"
   cap_add:
     - NET_ADMIN
     - SYS_NICE
