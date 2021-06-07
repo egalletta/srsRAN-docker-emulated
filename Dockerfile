@@ -34,12 +34,13 @@ RUN git checkout ${COMMIT}
 
 WORKDIR /srsran/build
 
-RUN cmake -j4 ../
-RUN make -j4
-RUN make -j4 install
+RUN cmake -j$(nproc) ../
+RUN make -j$(nproc)
+RUN make -j$(nproc) install
 RUN srsran_install_configs.sh service
 
 # Update dynamic linker
 RUN ldconfig
 
 WORKDIR /srsran
+
