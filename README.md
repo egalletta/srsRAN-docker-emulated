@@ -85,3 +85,9 @@ random access and connection setup. The UE enters that state after one minute
 of not having sent or received any data through the LTE connection, so make
 sure no pings are running.
 </details>
+
+### Shell access to containers
+
+Helper scripts are provided for easy shell access to the Docker containers.
+These are `./enterEPC`, `./enterENB` and `./enterUE` for the EPC, eNB and UE
+respectively.
