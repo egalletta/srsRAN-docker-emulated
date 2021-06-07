@@ -8,44 +8,56 @@ and shared memory. Core network, base station and user device all run in
 separate containers. The air interface is emulated via radio samples in shared
 memory.
 
-See it happen with
+### Usage
 
-    docker-compose up
+Clone the repository, and spin up the Docker containers with:
 
-After a while you'll se the UE attach:
+    $ docker-compose up
+
+The initial build can take several minutes. The `make` command will automatically
+run the srsRAN build with the optimal thread count using `nproc`.
+
+Around 15 seconds after srsRAN begins running, you'll see the UE attach with a
+message similar to this:
 
     virtual-srsue | Network attach successful. IP: 172.16.0.2
     virtual-srsenb | User 0x46 connected
 
 Now you can test the connection in a new terminal:
 
-    docker exec -i -t virtual-srsepc ping 172.16.0.2
+    $ docker exec -i -t virtual-srsepc ping 172.16.0.2
     PING 172.16.0.2 (172.16.0.2) 56(84) bytes of data.
     64 bytes from 172.16.0.2: icmp_seq=1 ttl=64 time=25.3 ms
     64 bytes from 172.16.0.2: icmp_seq=2 ttl=64 time=24.2 ms
 
-*Credits go to [jgiovatto] for implementing the shared memory radio interfaces
-and to [FabianEckermann] for figuring out how to integrate it with Docker's IPC
-functionality.*
+> Credits go to [jgiovatto] for implementing the shared memory radio interfaces
+> and to [FabianEckermann] for figuring out how to integrate it with Docker's IPC
+> functionality.
 
 [srsRAN]: https://github.com/srsLTE/srsRAN
 [jgiovatto]: https://github.com/jgiovatto
 [FabianEckermann]: https://github.com/FabianEckermann
 
-**A note on configuration:** During build, the example config files are copied
-into the workdir. These are the files you see used in the compose file with some
+#### Custom configurations
+
+During build, the example config files are copied into the workdir during the
+`make` job. These are the files you see used in the compose file with some
 option overrides. If you want to play around with the config yourself, it is
-much easier to place your custom files in this directory and `ADD` them in the
-Dockerfile. You can find the exact versions in [`srsepc`], [`srsenb`] and
-[`srsue`].
+much easier to place your custom files in this directory and `ADD` or `COPY`
+them in the Dockerfile. You can find the exact versions in [`srsepc`], [`srsenb`]
+and [`srsue`].
+
+The config files should be added to the `/etc/srsran` directory.
 
 [srsepc]: https://github.com/davwheat/srsRAN/tree/faux_rf/srsepc
 [srsenb]: https://github.com/davwheat/srsRAN/tree/faux_rf/srsenb
 [srsue]: https://github.com/davwheat/srsRAN/tree/faux_rf/srsue
 
-**Adding UEs:** The compose file contains an optional second UE. It uses the
-second IMSI from the default user_db.csv (srsEPC). To add more UEs, add IMSIs to
-the csv and tell the UEs to use them.
+#### Adding more UEs
+
+The compose file contains an optional second UE. It uses the second IMSI from
+the default `user_db.csv` (inside `srsEPC`). To add more UEs, add IMSIs to
+the CSV and tell the UEs to use them.
 
 ### Internet access for UEs
 
