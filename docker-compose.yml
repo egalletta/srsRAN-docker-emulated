@@ -1,10 +1,10 @@
-version: '2.2'
+version: '3.8'
 
 x-srsue:
   &ue-settings
   build: .
-  command: "srsue ue.conf.fauxrf"
-  ipc: "service:srsenb"
+  command: stdbuf -oL srsue /etc/srsran/ue.conf.fauxrf
+  ipc: service:srsenb
   cap_add:
     - NET_ADMIN
     - SYS_NICE
@@ -17,11 +17,7 @@ services:
   srsepc:
     container_name: virtual-srsepc
     build: .
-    command:
-      - srsepc
-      - epc.conf
-      - --mme.mme_bind_addr=10.80.95.10
-      - --spgw.gtpu_bind_addr=10.80.95.10
+    command: stdbuf -oL srsepc /etc/srsran/epc.conf --mme.mme_bind_addr=10.80.95.10 --spgw.gtpu_bind_addr=10.80.95.10
     networks:
       corenet:
         ipv4_address: 10.80.95.10
@@ -33,13 +29,7 @@ services:
   srsenb:
     container_name: virtual-srsenb
     build: .
-    command:
-      - srsenb
-      - enb.conf.fauxrf
-      - --enb.mme_addr=10.80.95.10
-      - --enb.gtp_bind_addr=10.80.95.11
-      - --enb.s1c_bind_addr=10.80.95.11
-      - --enb_files.sib_config=sib.conf
+    command: srsenb /etc/srsran/enb.conf.fauxrf --enb.mme_addr=10.80.95.10 --enb.gtp_bind_addr=10.80.95.11 --enb.s1c_bind_addr=10.80.95.11 --enb_files.sib_config=/etc/srsran/sib.conf
     networks:
       corenet:
         ipv4_address: 10.80.95.11
