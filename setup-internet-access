@@ -45,7 +45,7 @@ docker exec -i -t virtual-srsue ping -c 1 google.com
 echo
 echo
 echo "Everything looks good to go!"
-echo "To access the UE container, run the \`./enterUE\` script."
+echo "To access the UE container, run the `./enterUE` script."
 echo
 read -s -p "Press ENTER to continue."
 echo
