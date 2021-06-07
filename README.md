@@ -1,6 +1,9 @@
-# srslte-docker-emulated
+# srsran-docker-emulated
 
-This is a minimal example of an end-to-end [srsLTE] system running with Docker
+> This based on the repo created by [pgorczak](https://github.com/pgorczak),
+> updated to use the latest version of srsLTE, since renamed to srsRAN.
+
+This is a minimal example of an end-to-end [srsRAN] system running with Docker
 and shared memory. Core network, base station and user device all run in
 separate containers. The air interface is emulated via radio samples in shared
 memory.
@@ -25,7 +28,7 @@ Now you can test the connection in a new terminal:
 and to [FabianEckermann] for figuring out how to integrate it with Docker's IPC
 functionality.*
 
-[srsLTE]: https://github.com/srsLTE/srsLTE
+[srsRAN]: https://github.com/srsLTE/srsRAN
 [jgiovatto]: https://github.com/jgiovatto
 [FabianEckermann]: https://github.com/FabianEckermann
 
@@ -33,17 +36,29 @@ functionality.*
 into the workdir. These are the files you see used in the compose file with some
 option overrides. If you want to play around with the config yourself, it is
 much easier to place your custom files in this directory and `ADD` them in the
-Dockerfile. You can find the exact versions in [srsepc], [srsenb] and [srsue].
+Dockerfile. You can find the exact versions in [`srsepc`], [`srsenb`] and
+[`srsue`].
 
-[srsepc]: https://github.com/jgiovatto/srsLTE/tree/5d82f19988bc148d7f4cec7a0f29184375a64b40/srsepc
-[srsenb]: https://github.com/jgiovatto/srsLTE/tree/5d82f19988bc148d7f4cec7a0f29184375a64b40/srsenb
-[srsue]: https://github.com/jgiovatto/srsLTE/tree/5d82f19988bc148d7f4cec7a0f29184375a64b40/srsue
+[srsepc]: https://github.com/davwheat/srsRAN/tree/faux_rf/srsepc
+[srsenb]: https://github.com/davwheat/srsRAN/tree/faux_rf/srsenb
+[srsue]: https://github.com/davwheat/srsRAN/tree/faux_rf/srsue
 
 **Adding UEs:** The compose file contains an optional second UE. It uses the
 second IMSI from the default user_db.csv (srsEPC). To add more UEs, add IMSIs to
 the csv and tell the UEs to use them.
 
 ### Internet access for UEs
+
+For **automated setup**, run the helper script in the repository root.
+This assumes no details of the setup have been changed. If you run multiple
+UEs, you may need to perform manual setup for UEs after the first.
+
+```
+./setup-internet-access
+```
+
+<details>
+<summary>Manual instructions</summary>
 
 By default, containers are attached to a Docker network with a default
 route. This means everyone has internet access through the virtualized Docker
@@ -69,3 +84,4 @@ the UE enters "RRC IDLE" state, in which your ping command will trigger a
 random access and connection setup. The UE enters that state after one minute
 of not having sent or received any data through the LTE connection, so make
 sure no pings are running.
+</details>
