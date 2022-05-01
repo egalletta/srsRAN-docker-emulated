@@ -12,6 +12,9 @@ x-srsue:
     - /dev/net/tun
   depends_on:
     - srsenb
+  volumes:
+    - ./tmp:/tmp
+    - ./ue.conf.fauxrf:/etc/srsran/ue.conf.fauxrf
 
 services:
   srsepc:
