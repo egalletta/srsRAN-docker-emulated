@@ -1,0 +1,3 @@
+[submodule "web-traffic-generator"]
+	path = web-traffic-generator
+	url = git@github.com:ReconInfoSec/web-traffic-generator.git
