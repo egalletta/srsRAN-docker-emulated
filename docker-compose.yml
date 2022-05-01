@@ -15,6 +15,7 @@ x-srsue:
   volumes:
     - ./tmp:/tmp
     - ./ue.conf.fauxrf:/etc/srsran/ue.conf.fauxrf
+    - ./web-traffic-generator:/srs/web-traffic-generator
 
 services:
   srsepc:
